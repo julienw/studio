@@ -1,3 +1,12 @@
+/* global
+  AutoTheme,
+  Edit,
+  Generation,
+  Main,
+  Navigation,
+  Storage
+*/
+
 (function(exports) {
   'use strict';
 
@@ -7,19 +16,20 @@
     panel: document.getElementById('details'),
     header: document.querySelector('#details gaia-header'),
     title: document.querySelector('#details gaia-header h1'),
+    list: document.querySelector('#details gaia-list'),
 
     prepareForDisplay: function(params) {
-      var currentList = this.panel.querySelector('gaia-list');
-      if (currentList) {
-        this.panel.removeChild(currentList);
-      }
+      Array.from(this.list.children).forEach((item) => {
+        if (!item.classList.contains('static')) {
+          item.remove();
+        }
+      });
 
       Storage.fetchTheme(params.id).then((theme) => {
         currentTheme = theme;
         this.title.textContent = theme.title;
         this.header.setAttr('action', 'back');
 
-        var list = document.createElement('gaia-list')
         Object.keys(theme.sections).forEach(function(key) {
           var link = document.createElement('a');
           link.classList.add('navigation');
@@ -33,8 +43,8 @@
           forward.dataset.icon = 'forward-light';
           link.appendChild(forward);
 
-          list.appendChild(link);
-        });
+          this.list.appendChild(link);
+        }, this);
 
         var actions = [
           {
@@ -61,10 +71,8 @@
           var title = document.createElement('h3');
           title.textContent = params.title;
           link.appendChild(title);
-          list.appendChild(link);
-        });
-
-        this.panel.appendChild(list);
+          this.list.appendChild(link);
+        }, this);
       }).catch(function(error) {
         console.log(error);
       });
@@ -137,6 +145,7 @@
       return;
     }
 
+    AutoTheme.clean();
     Navigation.pop();
   });
 

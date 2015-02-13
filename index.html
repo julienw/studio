@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/edit.css">
+    <link rel="stylesheet" href="css/autotheme.css">
 
     <script type="text/javascript" src="js/storage.js" defer></script>
     <script type="text/javascript" src="js/generation.js" defer></script>
+    <script type="text/javascript" src="js/color.js" defer></script>
 
     <script type="text/javascript" src="js/libs/zip.js" defer></script>
     <script type="text/javascript" src="js/libs/appzip.js" defer></script>
@@ -35,6 +37,9 @@
     <link rel="localization" href="data/{locale}.properties" />
     <script type="text/javascript" src="js/libs/l10n.js" defer></script>
 
+    <script src="js/ext/color-thief.js" defer></script>
+    <script src="js/autotheme.js" defer></script>
+
     <link rel="stylesheet" type="text/css" href="app://theme.gaiamobile.org/shared/elements/gaia-theme/gaia-theme.css">
     <meta name="theme-color" content="var(--header-background)">
   </head>
@@ -48,6 +53,12 @@
       <gaia-header>
         <h1></h1>
       </gaia-header>
+      <gaia-list>
+        <div class="static autotheme">
+          <button class='autotheme-pick-image-button' type='button'>Pick an image</button>
+          <div class='autotheme-palette'></div>
+        </div>
+      </gaia-list>
     </section>
     <section id="edit" class="panel next">
       <gaia-header>
@@ -60,6 +71,7 @@
     <div id="edit-color">
       <div id="catcher" class="cancel"></div>
       <div id="controls">
+        <div class='autotheme-palette'></div>
         <gaia-color-picker value="#fff"></gaia-color-picker>
         <div>
           <gaia-button class="cancel">Cancel</gaia-button>

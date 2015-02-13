@@ -1,3 +1,5 @@
+/*global Color, Navigation, Storage */
+
 (function(exports) {
   'use strict';
 
@@ -13,6 +15,7 @@
     editColor: document.querySelector('#edit-color'),
     picker: document.querySelector('#edit-color gaia-color-picker'),
     iframe: document.querySelector('#edit iframe'),
+    autotheme: document.querySelector('#edit-color .autotheme-palette'),
 
     prepareForDisplay: function(params) {
       currentTheme = params.theme;
@@ -20,28 +23,23 @@
       this.title.textContent = params.section;
       this.header.setAttr('action', 'back');
 
-      this.picker.onchange = () => {
-        if (!currentKey) {
-          return;
-        }
-        var value = this.picker.value;
-        this.iframe.contentDocument.body.style.setProperty(currentKey, value);
-      };
+      this.picker.addEventListener('change', this.onPickerChange.bind(this));
 
       var currentList = this.list.querySelector('gaia-list');
       if (currentList) {
         this.list.removeChild(currentList);
       }
 
-      var list = document.createElement('gaia-list')
+      var list = document.createElement('gaia-list');
       currentSection = currentTheme.sections[params.section];
 
-      this.iframe.src = '/' + params.section + '-preview.html';
+      this.iframe.src = params.section + '-preview.html';
       this.iframe.onload = () => {
         Object.keys(currentSection).forEach((key) => {
-          this.iframe.contentDocument.body.style.setProperty(key, currentSection[key]);
+          var body = this.iframe.contentDocument.body;
+          body.style.setProperty(key, currentSection[key]);
         });
-      }
+      };
 
       Object.keys(currentSection).forEach((key) => {
         var link = document.createElement('a');
@@ -75,6 +73,14 @@
       currentKey = key;
       this.picker.value = currentSection[key];
       this.editColor.classList.add('editing');
+    },
+
+    onPickerChange() {
+      if (!currentKey) {
+        return;
+      }
+      var value = this.picker.value;
+      this.iframe.contentDocument.body.style.setProperty(currentKey, value);
     }
   };
 
@@ -98,16 +104,17 @@
 
   Edit.editColor.addEventListener('click', function(evt) {
     var target = evt.target;
+    var value;
 
     if (target.classList.contains('save')) {
       if (!currentKey) {
         return;
       }
 
-      var value = Edit.picker.value;
+      value = Edit.picker.value;
       currentSection[currentKey] = value;
 
-      var elem = Edit.list.querySelector('[data-id=' + currentKey + ']')
+      var elem = Edit.list.querySelector('[data-id=' + currentKey + ']');
       elem.textContent = value;
 
       Storage.updateTheme(currentTheme).then(() => {
@@ -124,12 +131,22 @@
     }
 
     if (currentKey) {
-      var value = currentSection[currentKey];
+      value = currentSection[currentKey];
       Edit.iframe.contentDocument.body.style.setProperty(currentKey, value);
     }
 
     Edit.editColor.classList.remove('editing');
     currentKey = null;
+  });
+
+  Edit.autotheme.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('palette-item')) {
+      return;
+    }
+
+    var color = Color.fromJSONString(e.target.dataset.color);
+    Edit.picker.value = color.toHexString();
+    Edit.onPickerChange();
   });
 
   exports.Edit = Edit;
