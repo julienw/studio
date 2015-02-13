@@ -30,6 +30,15 @@
         this.title.textContent = theme.title;
         this.header.setAttr('action', 'back');
 
+        if (theme.autotheme) {
+          AutoTheme.fromStorable(theme.autotheme);
+        }
+
+        AutoTheme.on('palette', () => {
+          currentTheme.autotheme = AutoTheme.asStorable();
+          Storage.updateTheme(currentTheme);
+        });
+
         Object.keys(theme.sections).forEach(function(key) {
           var link = document.createElement('a');
           link.classList.add('navigation');
@@ -147,6 +156,7 @@
 
     AutoTheme.clean();
     Navigation.pop();
+    Navigation.once('post-navigate', () => AutoTheme.clean());
   });
 
   exports.Details = Details;

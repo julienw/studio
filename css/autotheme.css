@@ -4,8 +4,12 @@
 }
 
 .autotheme-palette {
-  display: flex;
+  display: none;
   justify-content: space-around;
+}
+
+.has-autotheme .autotheme-palette {
+  display: flex;
 }
 
 .palette-item {

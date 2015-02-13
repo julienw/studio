@@ -1,4 +1,4 @@
-/*global Color, ColorThief, MozActivity */
+/*global Color, ColorThief, EventDispatcher, MozActivity */
 
 'use strict';
 
@@ -49,7 +49,7 @@
     return defer.promise;
   }
 
-  var AutoTheme = exports.AutoTheme = {
+  var AutoTheme = {
     get active() {
       return active;
     },
@@ -117,6 +117,7 @@
 
     storePalette(palette) {
       this.palette = palette.map(Color);
+      this.emit('palette');
     },
 
     showPalette(where) {
@@ -146,11 +147,14 @@
     },
 
     fromStorable(stored) {
-      this.palette = stored.palette;
+      this.palette = stored.palette.map(Color.fromStorable);
       this.image = stored.image;
       this.showPalette(this.elts.palettes);
+      this.active = true;
     }
   };
 
   AutoTheme.elts.button.addEventListener('click', AutoTheme);
+
+  exports.AutoTheme = EventDispatcher.mixin(AutoTheme, ['palette']);
 })(window);
