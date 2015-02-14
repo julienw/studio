@@ -56,10 +56,14 @@
 
         link.appendChild(label);
 
-        var value = document.createElement('span');
-        value.textContent = currentSection[key];
-        value.dataset.id = key;
-        link.appendChild(value);
+        var valueElt = document.createElement('div');
+        var value = currentSection[key];
+        valueElt.textContent = value;
+        valueElt.dataset.id = key;
+        valueElt.className = 'palette-item';
+        valueElt.style.backgroundColor = value;
+
+        link.appendChild(valueElt);
 
         list.appendChild(link);
       });
@@ -116,6 +120,7 @@
 
       var elem = Edit.list.querySelector('[data-id=' + currentKey + ']');
       elem.textContent = value;
+      elem.style.backgroundColor = value;
 
       Storage.updateTheme(currentTheme).then(() => {
         Edit.editColor.classList.remove('editing');
