@@ -101,8 +101,8 @@
     },
 
     once: function(eventName, handler) {
-      this.on(eventName, (parameters) => {
-        this.off(eventName, handler);
+      eventDispatcher.on.call(this, eventName, (parameters) => {
+        eventDispatcher.off.call(this, eventName, handler);
         handler(parameters);
       });
     },

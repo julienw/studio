@@ -69,7 +69,6 @@
           this.pickImage()
             .then(this.getPalette.bind(this))
             .then(this.storePalette.bind(this))
-            .then(() => this.active = true)
             .then(this.showPalette.bind(this, this.elts.palettes));
           break;
       }
@@ -117,7 +116,12 @@
     },
 
     storePalette(palette) {
-      this.palette = palette.map(Color);
+      if (palette === null) {
+        this.clean();
+      } else {
+        this.palette = palette.map(Color);
+        this.active = true;
+      }
       this.emit('palette');
     },
 
@@ -138,7 +142,6 @@
       this.active = false;
       this.palette = null;
       this.image = null;
-      this.emit('palette');
     },
 
     asStorable() {
@@ -167,7 +170,7 @@
 
   AutoTheme.elts.commandCreate.addEventListener('click', AutoTheme);
   AutoTheme.elts.commandCancel.addEventListener(
-    'click', () => AutoTheme.clean()
+    'click', () => AutoTheme.storePalette(null)
   );
 
   exports.AutoTheme = EventDispatcher.mixin(AutoTheme, ['palette']);
