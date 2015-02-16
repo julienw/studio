@@ -10,7 +10,7 @@
     var defer = new Defer();
 
     var img = new Image();
-    img.src = src
+    img.src = src;
 
     if (img.complete) {
       defer.resolve(img);
@@ -47,8 +47,8 @@
       document.body.classList.toggle('has-autotheme', bool);
     },
     elts: {
-      commandCreate: document.querySelector('.autotheme-command-create'),
-      commandCancel: document.querySelector('.autotheme-command-cancel')
+      commandCreate: document.querySelectorAll('.autotheme-command-create'),
+      commandCancel: document.querySelectorAll('.autotheme-command-cancel')
     },
 
     handleEvent(e) {
@@ -158,9 +158,11 @@
     }
   };
 
-  AutoTheme.elts.commandCreate.addEventListener('click', AutoTheme);
-  AutoTheme.elts.commandCancel.addEventListener(
-    'click', () => AutoTheme.storePalette(null)
+  Array.from(AutoTheme.elts.commandCreate).forEach(
+    elt => elt.addEventListener('click', AutoTheme)
+  );
+  Array.from(AutoTheme.elts.commandCancel).forEach(
+    elt => elt.addEventListener('click', () => AutoTheme.storePalette(null))
   );
 
   exports.AutoTheme = EventDispatcher.mixin(AutoTheme, ['palette']);

@@ -1,4 +1,5 @@
 /*global
+  AutoTheme,
   Defer,
   Details,
   Navigation,
@@ -12,6 +13,8 @@
     header: document.querySelector('#main gaia-header'),
     title: document.querySelector('#main gaia-header h1'),
     dialog: document.getElementById('new-theme-dialog'),
+    dialogInput: document.querySelector('.new-theme-title-input'),
+    autotheme: document.querySelector('#new-theme-dialog .autotheme-palette'),
 
     prepareForDisplay: function(params) {
       var currentList = this.panel.querySelector('gaia-list');
@@ -67,23 +70,37 @@
     },
 
     promptNewTheme() {
+      AutoTheme.on('palette', this.onPalette);
       this.dialog.open();
       this.createDialogDefer = new Defer();
       return this.createDialogDefer.promise;
     },
 
-    onDialogCancelClicked() {
+    closeDialog() {
       this.dialog.close();
+      this.dialogInput.value = '';
+      AutoTheme.off('palette', this.onPalette);
+      AutoTheme.clean();
+      this.onPalette();
       this.createDialogDefer = null;
     },
 
+    onPalette() {
+      // no "this" available here
+      AutoTheme.showPalette(Main.autotheme);
+    },
+
+    onDialogCancelClicked() {
+      this.closeDialog();
+    },
+
     onDialogCreateClicked() {
-      this.dialog.close();
       var result = {
-        title: this.dialog.querySelector('.new-theme-title-input').value
+        title: this.dialogInput.value,
+        autotheme: AutoTheme.asStorable()
       };
       this.createDialogDefer.resolve(result);
-      this.createDialogDefer = null;
+      this.closeDialog();
     }
   };
 

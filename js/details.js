@@ -162,8 +162,9 @@
     }
 
     AutoTheme.off('palette', Details.onPalette);
+    AutoTheme.clean();
     Navigation.pop();
-    Navigation.once('post-navigate', () => AutoTheme.clean());
+    Navigation.once('post-navigate', Details.onPalette);
   });
 
   exports.Details = Details;
