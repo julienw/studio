@@ -10,7 +10,7 @@
     var defer = new Defer();
 
     var img = new Image();
-    img.src = 'img/default_image.jpg';
+    img.src = src
 
     if (img.complete) {
       defer.resolve(img);
@@ -48,17 +48,15 @@
     },
     elts: {
       commandCreate: document.querySelector('.autotheme-command-create'),
-      commandCancel: document.querySelector('.autotheme-command-cancel'),
-      palettes: document.querySelectorAll('.autotheme-palette')
+      commandCancel: document.querySelector('.autotheme-command-cancel')
     },
 
     handleEvent(e) {
       switch(e.type) {
         case 'click':
           this.pickImage()
-            .then(this.getPalette.bind(this))
-            .then(this.storePalette.bind(this))
-            .then(this.showPalette.bind(this, this.elts.palettes));
+            .then(this.loadBlob.bind(this))
+            .then(this.storePalette.bind(this));
           break;
       }
     },
@@ -84,7 +82,7 @@
       });
     },
 
-    getPalette(blob) {
+    loadBlob(blob) {
       function imageFromBlob(blob) {
         var blobUrl = window.URL.createObjectURL(blob);
         return loadImage(blobUrl).then((image) => {
@@ -115,15 +113,18 @@
     },
 
     showPalette(where) {
-      where = Array.from(where);
-      where.forEach(elt => elt.textContent = '');
+      where.textContent = '';
+
+      if (!this.palette) {
+        return;
+      }
 
       this.palette.forEach((color) => {
         var elt = document.createElement('div');
         elt.className = 'palette-item';
         elt.style.backgroundColor = color.toCSS();
         elt.dataset.color = color.toJSONString();
-        where.forEach(where => where.appendChild(elt.cloneNode()));
+        where.appendChild(elt);
       });
     },
 
@@ -152,8 +153,8 @@
 
       this.palette = stored.palette.map(Color.fromStorable);
       this.image = stored.image;
-      this.showPalette(this.elts.palettes);
       this.active = true;
+      this.emit('palette');
     }
   };
 

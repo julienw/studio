@@ -17,6 +17,7 @@
     header: document.querySelector('#details gaia-header'),
     title: document.querySelector('#details gaia-header h1'),
     list: document.querySelector('#details gaia-list'),
+    autotheme: document.querySelector('#details .autotheme-palette'),
 
     prepareForDisplay: function(params) {
       Array.from(this.list.children).forEach((item) => {
@@ -86,7 +87,13 @@
         console.log(error);
       });
 
+      AutoTheme.on('palette', this.onPalette);
+
       return this.panel;
+    },
+
+    onPalette() {
+      AutoTheme.showPalette(Details.autotheme);
     },
 
     installTheme: function() {
@@ -154,7 +161,7 @@
       return;
     }
 
-    AutoTheme.clean();
+    AutoTheme.off('palette', Details.onPalette);
     Navigation.pop();
     Navigation.once('post-navigate', () => AutoTheme.clean());
   });

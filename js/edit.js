@@ -1,4 +1,4 @@
-/*global Color, Navigation, Storage */
+/*global AutoTheme, Color, Navigation, Storage */
 
 (function(exports) {
   'use strict';
@@ -22,6 +22,7 @@
 
       this.title.textContent = params.section;
       this.header.setAttr('action', 'back');
+      AutoTheme.showPalette(this.autotheme);
 
       this.picker.addEventListener('change', this.onPickerChange.bind(this));
 
