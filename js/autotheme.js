@@ -1,4 +1,4 @@
-/*global Color, ColorThief, EventDispatcher, MozActivity */
+/*global Color, ColorThief, Defer, EventDispatcher, MozActivity */
 
 'use strict';
 
@@ -6,19 +6,8 @@
   // is autotheming active
   var active;
 
-  Promise.Defer = function() {
-    var defer = {};
-
-    defer.promise = new Promise((resolve, reject) => {
-      defer.resolve = resolve;
-      defer.reject = reject;
-    });
-
-    return defer;
-  };
-
   function loadImage(src) {
-    var defer = new Promise.Defer();
+    var defer = new Defer();
 
     var img = new Image();
     img.src = 'img/default_image.jpg';
@@ -34,7 +23,7 @@
   }
 
   function blobFromURL(src) {
-    var defer = Promise.Defer();
+    var defer = new Defer();
 
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', () => {
@@ -75,7 +64,7 @@
     },
 
     pickImage() {
-      var defer = new Promise.Defer();
+      var defer = new Defer();
 
       if (window.MozActivity) {
         var activity = new MozActivity({
@@ -104,7 +93,7 @@
         });
       }
 
-      var defer = new Promise.Defer();
+      var defer = new Defer();
 
       imageFromBlob(blob).then((image) => {
         var colorThief = new ColorThief();

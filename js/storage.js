@@ -17,8 +17,8 @@
       return getTheme(id);
     },
 
-    createTheme: function(title) {
-      var theme = getTemplate(title);
+    createTheme: function(theme) {
+      theme = getTemplate(theme.title);
       return setTheme(theme);
     },
 
