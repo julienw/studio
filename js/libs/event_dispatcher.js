@@ -101,10 +101,12 @@
     },
 
     once: function(eventName, handler) {
-      eventDispatcher.on.call(this, eventName, (parameters) => {
-        eventDispatcher.off.call(this, eventName, handler);
+      var wrapped = (parameters) => {
+        eventDispatcher.off.call(this, eventName, wrapped);
         handler(parameters);
-      });
+      };
+
+      eventDispatcher.on.call(this, eventName, wrapped);
     },
 
     /**
