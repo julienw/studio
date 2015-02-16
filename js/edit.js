@@ -58,7 +58,7 @@
 
         var valueElt = document.createElement('div');
         var value = currentSection[key];
-        valueElt.textContent = value;
+        valueElt.setAttribute('aria-label', value);
         valueElt.dataset.id = key;
         valueElt.className = 'palette-item';
         valueElt.style.backgroundColor = value;
