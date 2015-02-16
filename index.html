@@ -55,9 +55,15 @@
         <h1></h1>
       </gaia-header>
       <gaia-list>
-        <div class="static autotheme">
-          <button class='autotheme-pick-image-button' type='button'>Pick an image</button>
-          <div class='autotheme-palette'></div>
+        <div class='static autotheme'>
+          <a class="autotheme-command-create">
+            <h3>Autotheme</h3>
+            <i data-icon="forward-light"></i>
+          </a>
+          <a class='hide-when-no-autotheme'>
+            <div class='autotheme-palette'></div>
+            <i data-icon="close" class='autotheme-command-cancel'></i>
+          </a>
         </div>
       </gaia-list>
     </section>
@@ -72,12 +78,12 @@
     <div id="edit-color">
       <div id="catcher" class="cancel"></div>
       <div id="controls">
-        <div class='autotheme-palette'></div>
+        <div class='autotheme-palette hide-when-no-autotheme'></div>
         <gaia-color-picker value="#fff"></gaia-color-picker>
-        <div>
+        <menu class='buttons-bar'>
           <gaia-button class="cancel">Cancel</gaia-button>
           <gaia-button class="save">Save</gaia-button>
-        </div>
+        </menu>
       </div>
     </div>
   </body>

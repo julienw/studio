@@ -58,7 +58,8 @@
       document.body.classList.toggle('has-autotheme', bool);
     },
     elts: {
-      button: document.querySelector('.autotheme-pick-image-button'),
+      commandCreate: document.querySelector('.autotheme-command-create'),
+      commandCancel: document.querySelector('.autotheme-command-cancel'),
       palettes: document.querySelectorAll('.autotheme-palette')
     },
 
@@ -137,9 +138,14 @@
       this.active = false;
       this.palette = null;
       this.image = null;
+      this.emit('palette');
     },
 
     asStorable() {
+      if (!this.active) {
+        return null;
+      }
+
       return {
         palette: this.palette.map((color) => color.toStorable()),
         image: this.image
@@ -147,6 +153,11 @@
     },
 
     fromStorable(stored) {
+      if (stored === null) {
+        this.clean();
+        return;
+      }
+
       this.palette = stored.palette.map(Color.fromStorable);
       this.image = stored.image;
       this.showPalette(this.elts.palettes);
@@ -154,7 +165,10 @@
     }
   };
 
-  AutoTheme.elts.button.addEventListener('click', AutoTheme);
+  AutoTheme.elts.commandCreate.addEventListener('click', AutoTheme);
+  AutoTheme.elts.commandCancel.addEventListener(
+    'click', () => AutoTheme.clean()
+  );
 
   exports.AutoTheme = EventDispatcher.mixin(AutoTheme, ['palette']);
 })(window);

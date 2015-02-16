@@ -1,21 +1,41 @@
-/* overrides gaia-list */
-#details .autotheme {
-  display: block;
+.autotheme {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.autotheme a {
+  display: flex;
+  flex: auto;
+  font-style: normal;
+  align-items: center;
+}
+
+.autotheme i {
+  width: unset;
+  margin-left: 1em;
+  align-self: center;
+  height: 21px; /* same as lineheight */
 }
 
 .autotheme-palette {
-  display: none;
+  display: flex;
   justify-content: space-around;
+  flex: auto;
 }
 
-.has-autotheme .autotheme-palette {
-  display: flex;
+body:not(.has-autotheme) .hide-when-no-autotheme {
+  display: none;
 }
 
 .palette-item {
-  width: 50px;
-  height: 50px;
-  flex: none;
+  flex: auto;
   border: 1px solid #ddd;
   color: transparent;
+}
+
+.palette-item:before{
+  content: "";
+  display: block;
+  padding-top: 100%;  /* initial ratio of 1:1*/
 }
