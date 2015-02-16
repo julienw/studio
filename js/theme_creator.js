@@ -54,36 +54,84 @@
   const THEME_TEMPLATE = {
     sections: {
       'Basics': {
-        '--background': '#ffffff',
-        '--text-color': '#4d4d4d',
-        '--highlight-color': '#00caf2',
-        '--link-color': '#00caf2',
-        '--border-color': '#e7e7e7',
-        '--button-background': '#f4f4f4',
-        '--input-background': '#ffffff',
-        '--input-color': '#333333',
-        '--input-clear-background': '#909ca7',
+        '--background': 'background',
+        '--text-color': 'text',
+        '--highlight-color': 'highlight',
+        '--link-color': 'highlight',
+        '--border-color': 'border',
+        '--button-background': 'button',
+        '--input-background': 'background',
+        '--input-color': 'input',
+        '--input-clear-background': 'inputClear',
       },
       'Header': {
-        '--header-background': '#ffffff',
-        '--header-color': '#4d4d4d',
-        '--header-icon-color': '#4d4d4d',
-        '--header-button-color': '#00caf2',
-        '--header-disabled-button-color': '#e7e7e7',
-        '--header-action-button-color': '#4d4d4d'
+        '--header-background': 'background',
+        '--header-color': 'header',
+        '--header-icon-color': 'headerIcon',
+        '--header-button-color': 'headerButton',
+        '--header-disabled-button-color': 'headerDisabledButton',
+        '--header-action-button-color': 'header'
       }
     }
   };
 
+  const THEME_DEFAULTS = {
+    background: '#ffffff',
+    text: '#4d4d4d',
+    highlight: '#00caf2',
+    border: '#e7e7e7',
+    button: '#f4f4f4',
+    input: '#333333',
+    inputClear: '#909ca7',
+    header: '#4d4d4d',
+    headerButton: '#00caf2',
+    headerDisabledButton: '#e7e7e7'
+  };
+
+  function replaceThemeTemplate(sections, palette) {
+    if (Array.isArray(palette)) {
+      var l = palette.length;
+      palette = Object.keys(THEME_DEFAULTS).reduce((acc, keyword, i) => {
+        acc[keyword] = palette[i % l];
+        return acc;
+      }, {});
+    }
+
+    var result = {};
+    Object.keys(sections).forEach(section => {
+      result[section] = {};
+      Object.keys(sections[section]).forEach(variable => {
+        var keyword = sections[section][variable];
+        var color = palette[keyword];
+        result[section][variable] =
+          color ? color.toHexString() : THEME_DEFAULTS[keyword];
+      });
+    });
+
+    return result;
+  }
+
   exports.ThemeCreator = {
+    /**
+     * theme is { title, [sessions], [autotheme], [palette] }
+     */
     template(theme) {
       var result = Object.assign({}, theme);
 
       for (var key in THEME_TEMPLATE) {
         if (!(key in result)) {
+          if (key === 'sections') {
+            result[key] = replaceThemeTemplate(
+              THEME_TEMPLATE[key],
+              theme.palette || {}
+            );
+            continue;
+          }
           result[key] = THEME_TEMPLATE[key];
         }
       }
+
+      delete result.palette;
       return result;
     },
 

@@ -22,7 +22,6 @@
     },
 
     createTheme: function(theme) {
-      theme = ThemeCreator.template(theme);
       return setTheme(theme);
     },
 

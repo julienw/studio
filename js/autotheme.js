@@ -95,7 +95,7 @@
 
       imageFromBlob(blob).then((image) => {
         var colorThief = new ColorThief();
-        var palette = colorThief.getPalette(image, 8);
+        var palette = colorThief.getPalette(image, 10);
         defer.resolve(palette);
       });
 

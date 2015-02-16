@@ -61,6 +61,9 @@
         if (!theme.title) {
           return;
         }
+
+        theme = ThemeCreator.template(theme);
+
         Storage.createTheme(theme).then(() => {
           this.prepareForDisplay();
         }).catch(function(error) {
@@ -97,7 +100,8 @@
     onDialogCreateClicked() {
       var result = {
         title: this.dialogInput.value,
-        autotheme: AutoTheme.asStorable()
+        autotheme: AutoTheme.asStorable(),
+        palette: AutoTheme.palette
       };
       this.createDialogDefer.resolve(result);
       this.closeDialog();
