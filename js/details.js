@@ -121,7 +121,7 @@
       target.classList.add('disabled');
       Details.installTheme().then(() => {
         target.classList.remove('disabled');
-      }).catch(console.error);
+      }).catch(console.error.bind(console));
       return;
     }
 
