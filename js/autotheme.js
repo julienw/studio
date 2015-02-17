@@ -61,6 +61,12 @@
       }
     },
 
+    /* called from activity */
+    load(blob) {
+      return this.loadBlob(blob)
+        .then(this.storePalette.bind(this));
+    },
+
     pickImage() {
       var defer = new Defer();
 
