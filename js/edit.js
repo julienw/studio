@@ -78,6 +78,7 @@
       currentKey = key;
       this.picker.value = currentSection[key];
       this.editColor.classList.add('editing');
+      this.picker.resize();
     },
 
     onPickerChange() {
@@ -120,7 +121,7 @@
       currentSection[currentKey] = value;
 
       var elem = Edit.list.querySelector('[data-id=' + currentKey + ']');
-      elem.textContent = value;
+      elem.setAttribute('aria-label', value);
       elem.style.backgroundColor = value;
 
       Storage.updateTheme(currentTheme).then(() => {
