@@ -73,7 +73,7 @@
       if (window.MozActivity) {
         var activity = new MozActivity({
           name: 'pick',
-          date: { type: 'image/*' }
+          data: { type: 'image/*' }
         });
 
         activity.onsuccess = () => defer.resolve(activity.result.blob);
