@@ -82,10 +82,7 @@
         defer.resolve(blobFromURL('img/default_image.jpg'));
       }
 
-      return defer.promise.then((blob) => {
-        this.image = blob;
-        return blob;
-      });
+      return defer.promise;
     },
 
     loadBlob(blob) {
@@ -96,6 +93,8 @@
           return image;
         });
       }
+
+      this.image = blob;
 
       var defer = new Defer();
 
