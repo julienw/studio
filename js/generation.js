@@ -124,8 +124,9 @@
       }
 
       var zipPromise = addManifest().then(addCSS);
+      var image;
       if (theme.autotheme) {
-        var image = theme.autotheme.image;
+        image = theme.autotheme.image;
         zipPromise = zipPromise.then(() => addWallpaper(image));
       }
 
@@ -134,10 +135,16 @@
           app.packageblob = packageBlob;
           return app.asBlob();
         }).then((appBlob) => {
-          return importBlob(appBlob).catch((e) => {
-            console.error('Error while importing blob', e);
-            proposeDownload(appBlob);
-          });
+          return importBlob(appBlob)
+            .then(() => Promise.resolve(image &&
+              navigator.mozSettings.createLock().set({
+                'wallpaper.image': image
+              })
+            ))
+            .catch((e) => {
+              console.error('Error while importing blob', e);
+              proposeDownload(appBlob);
+            });
         });
    });
   }
